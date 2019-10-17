@@ -6,6 +6,7 @@ pipeline {
       steps {
         script {
           openshift.withCluster() {
+            //TODO: sh './010'
             sh 'oc new-project development'
             sh 'oc new-project testing'
             sh 'oc new-project production'
