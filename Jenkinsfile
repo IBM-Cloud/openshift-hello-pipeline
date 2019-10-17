@@ -1,3 +1,4 @@
+def gitPath = 'https://github.com/IBM-Cloud/hello-node-app.git'
 pipeline {
   agent any
   stages {
@@ -20,6 +21,9 @@ pipeline {
         script {
           openshift.withCluster() {
             openshift.withProject('development') {
+              sh 'oc policy add-role-to-group system:image-puller system:serviceaccounts:production'
+              sh 'oc policy add-role-to-group system:image-puller system:serviceaccounts:testing'
+              openshift.newApp(gitPath).narrow('svc').expose()
               // NOTE: the selector returned when -F/--follow is supplied to startBuild()
               // will be inoperative for the various selector operations.
               // Consider removing those options from startBuild and using the logs()
@@ -43,8 +47,9 @@ pipeline {
       steps {
         script {
           openshift.withCluster() {
-            openshift.withProject('development') {
-              openshift.tag('hello-node-app:latest', 'testing/hello-node-app:test')
+            openshift.withProject('testing') {
+              openshift.tag('development/hello-node-app:latest', 'hello-node-app:test')
+              openshift.newApp("--image-stream=hello-node-app:test").narrow('svc').expose()
             }
           }
         }
@@ -63,8 +68,9 @@ pipeline {
       steps {
         script {
           openshift.withCluster() {
-            openshift.withProject('testing') {
-              openshift.tag('hello-node-app:test', 'production/hello-node-app:prod')
+            openshift.withProject('production') {
+              openshift.tag('testing/hello-node-app:test', 'hello-node-app:prod')
+              openshift.newApp("--image-stream=hello-node-app:prod").narrow('svc').expose()
             }
           }
         }
