@@ -23,6 +23,7 @@ pipeline {
             openshift.withProject('development') {
               sh 'oc policy add-role-to-group system:image-puller system:serviceaccounts:production'
               sh 'oc policy add-role-to-group system:image-puller system:serviceaccounts:testing'
+              sh 'oc policy add-role-to-user edit system:serviceaccount:cicd:jenkins'
               openshift.newApp(gitPath).narrow('svc').expose()
               // NOTE: the selector returned when -F/--follow is supplied to startBuild()
               // will be inoperative for the various selector operations.
@@ -48,6 +49,7 @@ pipeline {
         script {
           openshift.withCluster() {
             openshift.withProject('testing') {
+              sh 'oc policy add-role-to-user edit system:serviceaccount:cicd:jenkins'
               openshift.tag('development/hello-node-app:latest', 'hello-node-app:test')
               openshift.newApp("--image-stream=hello-node-app:test").narrow('svc').expose()
             }
@@ -69,6 +71,7 @@ pipeline {
         script {
           openshift.withCluster() {
             openshift.withProject('production') {
+              sh 'oc policy add-role-to-user edit system:serviceaccount:cicd:jenkins'
               openshift.tag('testing/hello-node-app:test', 'hello-node-app:prod')
               openshift.newApp("--image-stream=hello-node-app:prod").narrow('svc').expose()
             }
