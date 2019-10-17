@@ -1,7 +1,20 @@
 pipeline {
   agent any
   stages {
-      
+    stage('preamble') {
+      steps {
+        script {
+          openshift.withCluster() {
+            sh 'oc new-project development'
+            sh 'oc new-project testing'
+            sh 'oc new-project production'
+            openshift.withProject() {
+              echo "Using project: ${openshift.project()}"
+            }
+          }
+        }
+      }
+    }  
     stage('build') {
       steps {
         script {
