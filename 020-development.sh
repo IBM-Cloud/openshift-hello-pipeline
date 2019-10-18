@@ -6,6 +6,7 @@ oc project development
 # allow other projects to pull the image from development builds
 oc policy add-role-to-group system:image-puller system:serviceaccounts:production
 oc policy add-role-to-group system:image-puller system:serviceaccounts:testing
+oc policy add-role-to-user edit system:serviceaccount:cicd:jenkins
 
 # new app in dev
 oc new-app https://github.com/IBM-Cloud/hello-node-app.git
