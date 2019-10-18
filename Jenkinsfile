@@ -1,17 +1,24 @@
 pipeline {
   agent any
   stages {
-      
+    stage('preamble') {
+      steps {
+        script {
+          openshift.withCluster() {
+            // Shell script to create the required projects
+            sh './010-create-projects.sh'
+            }
+          }
+        }
+      }
+    }  
     stage('build') {
       steps {
         script {
           openshift.withCluster() {
             openshift.withProject('development') {
-              // NOTE: the selector returned when -F/--follow is supplied to startBuild()
-              // will be inoperative for the various selector operations.
-              // Consider removing those options from startBuild and using the logs()
-              // command to follow the build output.
-              openshift.selector('bc', 'hello-node-app').startBuild('--follow', '--wait')
+              // Run the shell script to build and deploy the app to development
+              sh './020-development.sh'
             }
           }
         }
@@ -30,8 +37,9 @@ pipeline {
       steps {
         script {
           openshift.withCluster() {
-            openshift.withProject('development') {
-              openshift.tag('hello-node-app:latest', 'testing/hello-node-app:test')
+            openshift.withProject('testing') {
+              // Run the shell script to deploy the app to testing
+              sh './030-testing.sh'
             }
           }
         }
@@ -50,8 +58,9 @@ pipeline {
       steps {
         script {
           openshift.withCluster() {
-            openshift.withProject('testing') {
-              openshift.tag('hello-node-app:test', 'production/hello-node-app:prod')
+            openshift.withProject('production') {
+              // Run the shell script to deploy the app to production
+              sh './040-production.sh'
             }
           }
         }
