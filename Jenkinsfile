@@ -1,6 +1,9 @@
 def gitPath = 'https://github.com/IBM-Cloud/hello-node-app.git'
 pipeline {
   agent any
+  options {
+    timeout(time: 20, unit: 'MINUTES') 
+  }
   stages {
     stage('preamble') {
       steps {
