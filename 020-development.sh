@@ -1,8 +1,4 @@
 #!/bin/bash
-
-# switch to development project
-oc project development
-
 # allow other projects to pull the image from development builds
 oc policy add-role-to-group system:image-puller system:serviceaccounts:production
 oc policy add-role-to-group system:image-puller system:serviceaccounts:testing

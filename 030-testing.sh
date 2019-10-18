@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# switch to testing
-oc project testing
-
 # grab the latest from dev
 oc tag development/hello-node-app:latest hello-node-app:test
 
