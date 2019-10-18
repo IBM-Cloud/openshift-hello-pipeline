@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# switch to production
+oc project production
+
 # grab the latest from test
 oc tag testing/hello-node-app:test hello-node-app:prod
 
