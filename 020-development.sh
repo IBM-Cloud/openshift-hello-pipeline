@@ -18,5 +18,5 @@ sleep 20
 
 # ping the app
 echo "App is ready at "
-oc get route hello-node-app --template '{{.spec.host}}')
+oc get route hello-node-app --template '{{.spec.host}}'
 
