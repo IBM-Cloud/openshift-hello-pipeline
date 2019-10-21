@@ -1,10 +1,22 @@
 def gitPath="https://github.com/IBM-Cloud/hello-node-app"
+def labelName="hello-node-app"
 pipeline {
   agent any
   options {
     timeout(time: 20, unit: 'MINUTES') 
   }
   stages {
+    stage('cleanup') {
+      steps {
+        script {
+            openshift.withCluster() {
+                openshift.withProject() {
+                  openshift.selector("all", [ template : templateName ]).delete() 
+                }
+            }
+        }
+      }
+    }
     stage('create projects') {
       steps {
         script {
@@ -14,9 +26,6 @@ pipeline {
             //sh 'oc new-project testing'
             //sh 'oc new-project production'
             sh './010-create-projects.sh'
-            openshift.withProject() {
-              echo "Using project: ${openshift.project()}"
-            }
           }
         }
       }
