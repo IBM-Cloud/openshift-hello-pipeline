@@ -14,7 +14,6 @@ oc new-app --image-stream=hello-node-app:test
 # make the test app visible
 oc expose svc/hello-node-app
 
-sleep 20
 # ping the app
 ROUTE=http://$(oc get route hello-node-app --template '{{.spec.host}}')
 until curl $ROUTE > /dev/null 2>&1
