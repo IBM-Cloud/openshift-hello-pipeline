@@ -8,8 +8,12 @@ pipeline {
       steps {
         script {
           openshift.withCluster() {
-            // Shell script to create the required projects
-            sh './010-create-projects.sh'
+            //TODO: sh './010'
+            sh 'oc new-project development'
+            sh 'oc new-project testing'
+            sh 'oc new-project production'
+            openshift.withProject() {
+              echo "Using project: ${openshift.project()}"
             }
           }
         }
@@ -19,8 +23,15 @@ pipeline {
         script {
           openshift.withCluster() {
             openshift.withProject('development') {
-              // Run the shell script to build and deploy the app to development
-              sh './020-development.sh'
+              sh 'oc policy add-role-to-group system:image-puller system:serviceaccounts:production'
+              sh 'oc policy add-role-to-group system:image-puller system:serviceaccounts:testing'
+              sh 'oc policy add-role-to-user edit system:serviceaccount:cicd:jenkins'
+              openshift.newApp(gitPath).narrow('svc').expose()
+              // NOTE: the selector returned when -F/--follow is supplied to startBuild()
+              // will be inoperative for the various selector operations.
+              // Consider removing those options from startBuild and using the logs()
+              // command to follow the build output.
+              // openshift.selector('bc', 'hello-node-app').startBuild('--follow', '--wait')
             }
           }
         }
@@ -40,8 +51,9 @@ pipeline {
         script {
           openshift.withCluster() {
             openshift.withProject('testing') {
-              // Run the shell script to deploy the app to testing
-              sh './030-testing.sh'
+              sh 'oc policy add-role-to-user edit system:serviceaccount:cicd:jenkins'
+              openshift.tag('development/hello-node-app:latest', 'hello-node-app:test')
+              openshift.newApp("--image-stream=hello-node-app:test").narrow('svc').expose()
             }
           }
         }
@@ -61,8 +73,9 @@ pipeline {
         script {
           openshift.withCluster() {
             openshift.withProject('production') {
-              // Run the shell script to deploy the app to production
-              sh './040-production.sh'
+              sh 'oc policy add-role-to-user edit system:serviceaccount:cicd:jenkins'
+              openshift.tag('testing/hello-node-app:test', 'hello-node-app:prod')
+              openshift.newApp("--image-stream=hello-node-app:prod").narrow('svc').expose()
             }
           }
         }
