@@ -17,6 +17,10 @@ oc expose svc hello-node-app
 sleep 20
 
 # ping the app
-echo "App is ready at "
-oc get route hello-node-app --template '{{.spec.host}}'
-
+ROUTE=http://$(oc get route hello-node-app --template '{{.spec.host}}')
+until curl $ROUTE > /dev/null 2>&1
+do
+  echo -n "."
+  sleep 10
+done
+echo "App is ready at $ROUTE"
