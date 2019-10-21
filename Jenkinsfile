@@ -1,3 +1,4 @@
+def gitPath="https://github.com/IBM-Cloud/hello-node-app"
 pipeline {
   agent any
   options {
