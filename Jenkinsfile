@@ -4,6 +4,22 @@ pipeline {
     timeout(time: 20, unit: 'MINUTES') 
   }
   stages {
+    stage('cleanup') {
+      steps {
+        script {
+          openshift.withCluster() {
+            //TODO: sh './010'
+            //sh 'oc new-project development'
+            //sh 'oc new-project testing'
+            //sh 'oc new-project production'
+            sh 'oc delete project development'
+            sh 'oc delete project testing'
+            sh 'oc delete project production'
+
+          }
+        }
+      }
+    }
     stage('create projects') {
       steps {
         script {
