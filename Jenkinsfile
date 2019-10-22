@@ -12,10 +12,15 @@ pipeline {
             //sh 'oc new-project development'
             //sh 'oc new-project testing'
             //sh 'oc new-project production'
-            sh 'oc delete project development'
-            sh 'oc delete project testing'
-            sh 'oc delete project production'
-
+            if (openshift.selector("projects", "development").exists()) { 
+                    openshift.selector("projects", "development").delete()
+                  }
+            if (openshift.selector("projects", "testing").exists()) { 
+                    openshift.selector("projects", "testing").delete()
+                  }
+            if (openshift.selector("projects", "production").exists()) { 
+                    openshift.selector("projects", "production").delete()
+                  }
           }
         }
       }
