@@ -9,7 +9,7 @@ oc policy add-role-to-group system:image-puller system:serviceaccounts:testing
 oc policy add-role-to-user edit system:serviceaccount:cicd:jenkins
 
 # new app in dev
-oc new-app https://github.com/IBM-Cloud/hello-node-app.git
+oc new-app https://github.com/IBM-Cloud/hello-node-app.git --allow-missing-images
 
 # expose the app
 oc expose svc hello-node-app
