@@ -4,19 +4,6 @@ pipeline {
     timeout(time: 20, unit: 'MINUTES') 
   }
   stages {
-    stage('create projects') {
-      steps {
-        script {
-          openshift.withCluster() {
-            //TODO: sh './010'
-            //sh 'oc new-project development'
-            //sh 'oc new-project testing'
-            //sh 'oc new-project production'
-            sh './010-create-projects.sh'
-          }
-        }
-      }
-    }
     stage('build') {
       steps {
         script {
