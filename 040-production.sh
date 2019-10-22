@@ -3,8 +3,6 @@
 # switch to production
 oc project production
 
-oc policy add-role-to-user edit system:serviceaccount:cicd:jenkins
-
 # grab the latest from test
 oc tag testing/hello-node-app:test hello-node-app:prod
 
