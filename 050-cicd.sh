@@ -1,5 +1,7 @@
 #!/bin/bash
 
+oc project cicd
+
 # add policy for project creation
 oc adm policy add-cluster-role-to-user self-provisioner -z jenkins
 
