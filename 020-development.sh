@@ -8,7 +8,7 @@ oc policy add-role-to-group system:image-puller system:serviceaccounts:productio
 oc policy add-role-to-group system:image-puller system:serviceaccounts:testing
 
 # new app in dev
-oc new-app https://github.com/IBM-Cloud/hello-node-app.git
+oc new-app https://github.com/IBM-Cloud/hello-node-app.git -e ENVIRONMENT=development
 
 # expose the app
 oc expose svc hello-node-app

@@ -7,7 +7,7 @@ oc project production
 oc tag testing/hello-node-app:test hello-node-app:prod
 
 # and create an app out of it
-oc new-app --image-stream=hello-node-app:prod
+oc new-app --image-stream=hello-node-app:prod -e ENVIRONMENT=production
 
 # make the test app externally visible
 oc expose svc/hello-node-app

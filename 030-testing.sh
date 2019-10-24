@@ -7,7 +7,7 @@ oc project testing
 oc tag development/hello-node-app:latest hello-node-app:test
 
 # and create an app out of it
-oc new-app --image-stream=hello-node-app:test
+oc new-app --image-stream=hello-node-app:test -e ENVIRONMENT=testing
 
 # make the test app visible
 oc expose svc/hello-node-app
