@@ -4,6 +4,15 @@ pipeline {
     timeout(time: 20, unit: 'MINUTES') 
   }
   stages {
+    stage('preamble') {
+      steps {
+        script {
+          openshift.withCluster() {
+            sh './010-create-projects.sh'
+          }
+        }
+      }
+    }
     stage('build') {
       steps {
         script {
