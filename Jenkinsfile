@@ -22,7 +22,7 @@ pipeline {
               // will be inoperative for the various selector operations.
               // Consider removing those options from startBuild and using the logs()
               // command to follow the build output.
-              openshift.selector('bc', 'hello-node-app').startBuild().logs('--follow', '--wait')
+              openshift.selector('bc', 'hello-node-app').startBuild().logs('-f')
             }
           }
         }
