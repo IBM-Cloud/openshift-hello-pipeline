@@ -1,5 +1,12 @@
 #!/bin/bash
 
+APP_REPOSITORY=$1
+if [ -z "$APP_REPOSITORY" ]; then
+  APP_REPOSITORY="https://github.com/IBM-Cloud/openshift-hello-app.git"
+  echo "App repository not set, using the default"
+fi
+echo "App repository is set to $APP_REPOSITORY"
+
 # switch to development project
 oc project development
 
@@ -8,7 +15,7 @@ oc policy add-role-to-group system:image-puller system:serviceaccounts:productio
 oc policy add-role-to-group system:image-puller system:serviceaccounts:testing
 
 # new app in dev
-oc new-app https://github.com/IBM-Cloud/openshift-hello-app.git -e ENVIRONMENT=development
+oc new-app "$APP_REPOSITORY" --name hello-node-app -e ENVIRONMENT=development
 
 # expose the app
 oc expose svc hello-node-app
