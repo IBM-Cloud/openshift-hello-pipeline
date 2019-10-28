@@ -8,4 +8,4 @@ oc policy add-role-to-user edit system:serviceaccount:cicd:jenkins -n testing
 oc policy add-role-to-user edit system:serviceaccount:cicd:jenkins -n production
 
 # create a new app pointing to the repo with Jenkinsfile
-oc new-app https://github.com/IBM-Cloud/hello-node-app-pipeline.git
+oc new-app https://github.com/IBM-Cloud/openshift-hello-pipeline.git

@@ -5,7 +5,7 @@
 - Red Hat OpenShift on IBM Cloud cluster
 - OpenShift CLI
 
-> **Note:** The scripts use the hello-node-app from a [Git repo](https://github.com/IBM-Cloud/hello-node-app)
+> **Note:** The scripts use the hello-node-app from a [Git repo](https://github.com/IBM-Cloud/openshift-hello-app)
 
 ## Deploy a node app to Dev/Test/Prod
 
