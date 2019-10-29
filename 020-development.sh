@@ -7,8 +7,12 @@ if [ -z "$APP_REPOSITORY" ]; then
 fi
 echo "App repository is set to $APP_REPOSITORY"
 
-# switch to development project
-oc project development
+RESPONSE=$(oc project development 2>&1)
+# switch to development
+if [[ $RESPONSE == *"does not exist"* ]]; then
+  echo "Creating a new project"
+  oc new-project development
+fi
 
 # allow other projects to pull the image from development builds
 oc policy add-role-to-group system:image-puller system:serviceaccounts:production

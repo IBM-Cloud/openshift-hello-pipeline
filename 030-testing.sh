@@ -1,7 +1,11 @@
 #!/bin/bash
 
+RESPONSE=$(oc project testing 2>&1)
 # switch to testing
-oc project testing
+if [[ $RESPONSE == *"does not exist"* ]]; then
+  echo "Creating a new project"
+  oc new-project testing
+fi
 
 # grab the latest from dev
 oc tag development/hello-node-app:latest hello-node-app:test

@@ -1,7 +1,11 @@
 #!/bin/bash
 
+RESPONSE=$(oc project production 2>&1)
 # switch to production
-oc project production
+if [[ $RESPONSE == *"does not exist"* ]]; then
+  echo "Creating a new project"
+  oc new-project production
+fi
 
 # grab the latest from test
 oc tag testing/hello-node-app:test hello-node-app:prod
